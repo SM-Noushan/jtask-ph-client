@@ -1,10 +1,34 @@
-import { Pagination, Select } from "antd";
+import { Pagination, Select, Skeleton } from "antd";
 import Filter from "../../Components/Products/Filter";
 import Product from "../../Components/Products/Product";
 import useMyState from "../../Hooks/useMyState";
+import { useEffect } from "react";
+import axios from "axios";
+
+const ProductSkeleton = () => (
+  <div className="space-y-4 lg:w-52 xl:w-80">
+    <Skeleton.Image />
+    <Skeleton />
+  </div>
+);
 
 const Home = () => {
-  const { filter, setFilter } = useMyState();
+  const {
+    baseURL,
+    filter,
+    setFilter,
+    items,
+    setItems,
+    itemsPending,
+    setItemsPending,
+  } = useMyState();
+  useEffect(() => {
+    axios.get(`${baseURL}/products`).then((response) => {
+      setItems(response.data);
+      setItemsPending(false);
+    });
+  }, []);
+
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">
       <Filter />
@@ -63,12 +87,15 @@ const Home = () => {
           </div>
         </div>
         <div className="lg:flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container max-w-screen-xl px-4 lg:px-0 mx-auto">
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
-          <Product />
+          {itemsPending ? (
+            <>
+              <ProductSkeleton />
+              <ProductSkeleton />
+              <ProductSkeleton />
+            </>
+          ) : (
+            items.map((item) => <Product key={item._id} item={item} />)
+          )}
         </div>
         <div className="mt-6">
           <Pagination

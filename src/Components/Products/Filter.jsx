@@ -34,7 +34,7 @@ const Filter = () => {
   };
 
   useEffect(() => {
-    console.log(category);
+    // console.log(category);
     // console.log(brand);
   }, [category]);
 
