@@ -2,10 +2,11 @@ import { useNavigate } from "react-router-dom";
 import useMyState from "../../Hooks/useMyState";
 
 const Search = () => {
-  const { setSearchItems } = useMyState();
+  const { setSearchItems, setCurrPage } = useMyState();
   const navigate = useNavigate();
   const handleForm = (e) => {
     e.preventDefault();
+    setCurrPage(1);
     setSearchItems(e.target.search.value);
     navigate(`/?search=${e.target.search.value}`);
   };

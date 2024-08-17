@@ -4,7 +4,6 @@ import Product from "../../Components/Products/Product";
 import useMyState from "../../Hooks/useMyState";
 import { useEffect } from "react";
 import axios from "axios";
-import { useLocale } from "antd/es/locale";
 import { useLocation } from "react-router-dom";
 
 const ProductSkeleton = () => (
@@ -19,6 +18,12 @@ const Home = () => {
     baseURL,
     filter,
     setFilter,
+    itemsCount,
+    setItemCounts,
+    itemsCountPending,
+    currPage,
+    setCurrPage,
+    setItemsCountPending,
     items,
     setItems,
     searchItems,
@@ -30,16 +35,31 @@ const Home = () => {
   const { search } = useLocation();
 
   useEffect(() => {
-    if (!search) setSearchItems("");
+    if (!search) {
+      setSearchItems("");
+      setCurrPage(1);
+    }
   }, [search]);
 
   useEffect(() => {
-    setItemsPending(true);
-    axios.get(`${baseURL}/products?search=${searchItems}`).then((response) => {
-      setItems(response.data);
-      setItemsPending(false);
-    });
+    setItemsCountPending(true);
+    axios
+      .get(`${baseURL}/totalProductsCount?search=${searchItems}`)
+      .then((response) => {
+        setItemCounts(response.data.itemCount);
+        setItemsCountPending(false);
+      });
   }, [searchItems]);
+
+  useEffect(() => {
+    setItemsPending(true);
+    axios
+      .get(`${baseURL}/products?search=${searchItems}&page=${currPage}`)
+      .then((response) => {
+        setItems(response.data);
+        setItemsPending(false);
+      });
+  }, [searchItems, currPage]);
 
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">
@@ -119,16 +139,19 @@ const Home = () => {
             <Empty />
           )}
         </div>
-        {!itemsPending && (
+        {!itemsPending && !itemsCountPending && (
           <div className="mt-6">
             <Pagination
               align="center"
-              total={40}
+              total={itemsCount}
               showTotal={(total, range) =>
                 `${range[0]}-${range[1]} of ${total} items`
               }
-              defaultPageSize={3}
+              defaultPageSize={6}
+              current={currPage}
               defaultCurrent={1}
+              showLessItems={true}
+              onChange={(pageNum) => setCurrPage(pageNum)}
             />
           </div>
         )}

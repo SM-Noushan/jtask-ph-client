@@ -8,6 +8,11 @@ export const StateContext = createContext(null);
 const StateProvider = ({ children }) => {
   //toggle filter for small screens
   const [filter, setFilter] = useState(false);
+  //for items/products count
+  const [itemsCount, setItemCounts] = useState(0);
+  const [itemsCountPending, setItemsCountPending] = useState(true);
+  //for current page number
+  const [currPage, setCurrPage] = useState(1);
   //for items/products
   const [items, setItems] = useState(null);
   const [searchItems, setSearchItems] = useState("");
@@ -16,6 +21,12 @@ const StateProvider = ({ children }) => {
   const stateInfo = {
     filter,
     setFilter,
+    itemsCount,
+    setItemCounts,
+    itemsCountPending,
+    setItemsCountPending,
+    currPage,
+    setCurrPage,
     items,
     setItems,
     searchItems,
