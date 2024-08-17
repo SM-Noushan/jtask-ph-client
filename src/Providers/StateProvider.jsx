@@ -13,6 +13,8 @@ const StateProvider = ({ children }) => {
   const [itemsCountPending, setItemsCountPending] = useState(true);
   //for current page number
   const [currPage, setCurrPage] = useState(1);
+  //for sorting value
+  const [sortBy, setSortBy] = useState("default");
   //for items/products
   const [items, setItems] = useState(null);
   const [searchItems, setSearchItems] = useState("");
@@ -27,6 +29,8 @@ const StateProvider = ({ children }) => {
     setItemsCountPending,
     currPage,
     setCurrPage,
+    sortBy,
+    setSortBy,
     items,
     setItems,
     searchItems,

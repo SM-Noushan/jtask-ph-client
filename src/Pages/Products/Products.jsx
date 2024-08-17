@@ -30,6 +30,8 @@ const Home = () => {
     itemsPending,
     setItemsPending,
     setSearchItems,
+    sortBy,
+    setSortBy,
   } = useMyState();
 
   const { search } = useLocation();
@@ -41,6 +43,7 @@ const Home = () => {
     }
   }, [search]);
 
+  // item counts
   useEffect(() => {
     setItemsCountPending(true);
     axios
@@ -51,15 +54,18 @@ const Home = () => {
       });
   }, [searchItems]);
 
+  // fetch items
   useEffect(() => {
     setItemsPending(true);
     axios
-      .get(`${baseURL}/products?search=${searchItems}&page=${currPage}`)
+      .get(
+        `${baseURL}/products?search=${searchItems}&page=${currPage}&sort=${sortBy}`
+      )
       .then((response) => {
         setItems(response.data);
         setItemsPending(false);
       });
-  }, [searchItems, currPage]);
+  }, [searchItems, currPage, sortBy]);
 
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">
@@ -92,22 +98,22 @@ const Home = () => {
           <div>
             <span>Sort By: </span>
             <Select
-              defaultValue="Default"
+              defaultValue="default"
               style={{
                 width: 160,
               }}
-              onChange={(val) => console.log(val)}
+              onChange={(val) => setSortBy(val)}
               options={[
                 {
-                  value: "Default",
+                  value: "default",
                   label: "Default",
                 },
                 {
-                  value: "Price (Low)",
+                  value: "priceAsc",
                   label: "Price (Low To High)",
                 },
                 {
-                  value: "Price (High)",
+                  value: "priceDesc",
                   label: "Price (High To Low)",
                 },
                 {
@@ -149,7 +155,7 @@ const Home = () => {
               }
               defaultPageSize={6}
               current={currPage}
-              defaultCurrent={1}
+              // defaultCurrent={1}
               showLessItems={true}
               onChange={(pageNum) => setCurrPage(pageNum)}
             />
