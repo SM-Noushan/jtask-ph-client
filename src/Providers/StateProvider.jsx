@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { createContext, useState } from "react";
 
-const baseURL = "http://localhost:8000/api";
+const baseURL = "https://supershop-ph.vercel.app/api";
 
 export const StateContext = createContext(null);
 

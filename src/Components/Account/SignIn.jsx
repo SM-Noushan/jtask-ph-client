@@ -47,7 +47,7 @@ const socialLogin = (google, loading, handleSocialLogin) => (
 );
 
 const SignIn = () => {
-  const { user, loading, setLoading, signInWithGoogle, signIn } = useAuth();
+  const { loading, setLoading, signInWithGoogle, signIn } = useAuth();
   const navigate = useNavigate();
 
   //   Google Login
