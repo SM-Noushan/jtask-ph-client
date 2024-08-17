@@ -1,4 +1,4 @@
-import { Select } from "antd";
+import { Pagination, Select } from "antd";
 import Filter from "../../Components/Products/Filter";
 import Product from "../../Components/Products/Product";
 import useMyState from "../../Hooks/useMyState";
@@ -68,6 +68,18 @@ const Home = () => {
           <Product />
           <Product />
           <Product />
+          <Product />
+        </div>
+        <div className="mt-6">
+          <Pagination
+            align="center"
+            total={40}
+            showTotal={(total, range) =>
+              `${range[0]}-${range[1]} of ${total} items`
+            }
+            defaultPageSize={3}
+            defaultCurrent={1}
+          />
         </div>
       </div>
     </div>
