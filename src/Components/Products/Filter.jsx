@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { Checkbox, InputNumber, Slider } from "antd";
+import { Checkbox, InputNumber, Slider, Spin } from "antd";
 import useMyState from "../../Hooks/useMyState";
+import axios from "axios";
 
 const FilterTitle = ({ title }) => (
   <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-950">
@@ -10,10 +11,21 @@ const FilterTitle = ({ title }) => (
 );
 
 const Filter = () => {
-  const { filter, setFilter, minPrice, setMinPrice, maxPrice, setMaxPrice } =
-    useMyState();
+  const {
+    baseURL,
+    filter,
+    setFilter,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
+    allCategoriesAndBrands,
+    setAllCategoriesAndBrands,
+    allCategoriesAndBrandsPending,
+    setAllCategoriesAndBrandsPending,
+    setBrand,
+  } = useMyState();
 
-  const [brand, setBrand] = useState([]);
   const [category, setCategory] = useState([]);
 
   // handler for price range changes
@@ -25,18 +37,22 @@ const Filter = () => {
 
   //   handler for brands
   const handleBrands = (val) => {
-    setBrand(val);
+    setBrand([...val]);
   };
 
   //   handler for category
   const handleCategory = (val) => {
+    console.log("cat", val);
     setCategory(val);
   };
 
   useEffect(() => {
-    // console.log(category);
-    // console.log(brand);
-  }, [category]);
+    setAllCategoriesAndBrandsPending(true);
+    axios.get(`${baseURL}/categoriesAndBrands`).then((response) => {
+      setAllCategoriesAndBrands(response?.data[0]);
+      setAllCategoriesAndBrandsPending(false);
+    });
+  }, []);
 
   return (
     <aside
@@ -65,7 +81,7 @@ const Filter = () => {
         </svg>
       </button>
 
-      <nav className="space-y-8 text-sm *:p-6 *:space-y-2 *:bg-white *:rounded-md">
+      <nav className="space-y-8 text-sm *:px-6 py-6 *:space-y-2 *:bg-white *:rounded-md">
         {/* price range */}
         <div>
           <FilterTitle title="Price Range" />
@@ -99,8 +115,15 @@ const Filter = () => {
         <div>
           <FilterTitle title="Brand" />
           <Checkbox.Group className="flex flex-col" onChange={handleBrands}>
-            <Checkbox value="Brand A">Brand A</Checkbox>
-            <Checkbox value="Brand B">Brand B</Checkbox>
+            {allCategoriesAndBrandsPending ? (
+              <Spin />
+            ) : (
+              allCategoriesAndBrands?.brands?.map((brand, idx) => (
+                <Checkbox key={idx} value={brand}>
+                  {brand}
+                </Checkbox>
+              ))
+            )}
           </Checkbox.Group>
         </div>
         {/* filter by category */}

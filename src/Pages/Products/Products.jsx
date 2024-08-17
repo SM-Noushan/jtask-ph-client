@@ -36,6 +36,8 @@ const Home = () => {
     setMinPrice,
     maxPrice,
     setMaxPrice,
+    brand,
+    setBrand,
   } = useMyState();
 
   const { search } = useLocation();
@@ -52,26 +54,26 @@ const Home = () => {
     setItemsCountPending(true);
     axios
       .get(
-        `${baseURL}/totalProductsCount?search=${searchItems}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+        `${baseURL}/totalProductsCount?search=${searchItems}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}`
       )
       .then((response) => {
         setItemCounts(response.data.itemCount);
         setItemsCountPending(false);
       });
-  }, [searchItems, minPrice, maxPrice]);
+  }, [searchItems, minPrice, maxPrice, brand]);
 
   // fetch items
   useEffect(() => {
     setItemsPending(true);
     axios
       .get(
-        `${baseURL}/products?search=${searchItems}&page=${currPage}&sort=${sortBy}&minPrice=${minPrice}&maxPrice=${maxPrice}`
+        `${baseURL}/products?search=${searchItems}&page=${currPage}&sort=${sortBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}`
       )
       .then((response) => {
         setItems(response.data);
         setItemsPending(false);
       });
-  }, [searchItems, currPage, sortBy, minPrice, maxPrice]);
+  }, [searchItems, currPage, sortBy, minPrice, maxPrice,brand,baseURL]);
 
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">

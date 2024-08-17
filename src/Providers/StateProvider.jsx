@@ -22,6 +22,12 @@ const StateProvider = ({ children }) => {
   // filter by price range
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(2500);
+  // all categories and brands
+  const [allCategoriesAndBrands, setAllCategoriesAndBrands] = useState([]);
+  const [allCategoriesAndBrandsPending, setAllCategoriesAndBrandsPending] =
+    useState(true);
+  //filter by brand
+  const [brand, setBrand] = useState([]);
 
   const stateInfo = {
     filter,
@@ -45,6 +51,12 @@ const StateProvider = ({ children }) => {
     setMinPrice,
     maxPrice,
     setMaxPrice,
+    allCategoriesAndBrands,
+    setAllCategoriesAndBrands,
+    allCategoriesAndBrandsPending,
+    setAllCategoriesAndBrandsPending,
+    brand,
+    setBrand,
   };
 
   return (
