@@ -1,9 +1,11 @@
-import { Pagination, Select, Skeleton } from "antd";
+import { Empty, Pagination, Select, Skeleton } from "antd";
 import Filter from "../../Components/Products/Filter";
 import Product from "../../Components/Products/Product";
 import useMyState from "../../Hooks/useMyState";
 import { useEffect } from "react";
 import axios from "axios";
+import { useLocale } from "antd/es/locale";
+import { useLocation } from "react-router-dom";
 
 const ProductSkeleton = () => (
   <div className="space-y-4 lg:w-52 xl:w-80">
@@ -19,20 +21,30 @@ const Home = () => {
     setFilter,
     items,
     setItems,
+    searchItems,
     itemsPending,
     setItemsPending,
+    setSearchItems,
   } = useMyState();
+
+  const { search } = useLocation();
+
   useEffect(() => {
-    axios.get(`${baseURL}/products`).then((response) => {
+    if (!search) setSearchItems("");
+  }, [search]);
+
+  useEffect(() => {
+    setItemsPending(true);
+    axios.get(`${baseURL}/products?search=${searchItems}`).then((response) => {
       setItems(response.data);
       setItemsPending(false);
     });
-  }, []);
+  }, [searchItems]);
 
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">
       <Filter />
-      <div>
+      <div className="lg:flex-1">
         <div className="mb-6 flex justify-between lg:justify-end">
           <button
             type="button"
@@ -86,28 +98,40 @@ const Home = () => {
             />
           </div>
         </div>
-        <div className="lg:flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container max-w-screen-xl px-4 lg:px-0 mx-auto">
+        <div
+          className={
+            itemsPending
+              ? ""
+              : items?.length > 0
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container max-w-screen-xl px-4 lg:px-0 mx-auto"
+              : ""
+          }
+        >
           {itemsPending ? (
             <>
               <ProductSkeleton />
               <ProductSkeleton />
               <ProductSkeleton />
             </>
-          ) : (
+          ) : items?.length > 0 ? (
             items.map((item) => <Product key={item._id} item={item} />)
+          ) : (
+            <Empty />
           )}
         </div>
-        <div className="mt-6">
-          <Pagination
-            align="center"
-            total={40}
-            showTotal={(total, range) =>
-              `${range[0]}-${range[1]} of ${total} items`
-            }
-            defaultPageSize={3}
-            defaultCurrent={1}
-          />
-        </div>
+        {!itemsPending && (
+          <div className="mt-6">
+            <Pagination
+              align="center"
+              total={40}
+              showTotal={(total, range) =>
+                `${range[0]}-${range[1]} of ${total} items`
+              }
+              defaultPageSize={3}
+              defaultCurrent={1}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

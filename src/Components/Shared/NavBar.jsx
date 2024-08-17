@@ -25,10 +25,7 @@ const NavBar = () => {
         </div>
 
         <div className="flex flex-1 items-center justify-end">
-          <Link
-            to="'/login"
-            className="font-semibold leading-6 text-gray-900"
-          >
+          <Link to="'/login" className="font-semibold leading-6 text-gray-900">
             Log in <span aria-hidden="true">&rarr;</span>
           </Link>
         </div>

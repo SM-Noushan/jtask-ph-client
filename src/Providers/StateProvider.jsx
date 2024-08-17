@@ -10,13 +10,16 @@ const StateProvider = ({ children }) => {
   const [filter, setFilter] = useState(false);
   //for items/products
   const [items, setItems] = useState(null);
-  const [itemsPending, setItemsPending] = useState(true); //for
+  const [searchItems, setSearchItems] = useState("");
+  const [itemsPending, setItemsPending] = useState(true);
 
   const stateInfo = {
     filter,
     setFilter,
     items,
     setItems,
+    searchItems,
+    setSearchItems,
     itemsPending,
     setItemsPending,
     baseURL,
