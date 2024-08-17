@@ -19,6 +19,9 @@ const StateProvider = ({ children }) => {
   const [items, setItems] = useState(null);
   const [searchItems, setSearchItems] = useState("");
   const [itemsPending, setItemsPending] = useState(true);
+  // filter by price range
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(2500);
 
   const stateInfo = {
     filter,
@@ -38,6 +41,10 @@ const StateProvider = ({ children }) => {
     itemsPending,
     setItemsPending,
     baseURL,
+    minPrice,
+    setMinPrice,
+    maxPrice,
+    setMaxPrice,
   };
 
   return (
