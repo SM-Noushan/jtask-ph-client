@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Checkbox, InputNumber, Slider, Spin } from "antd";
 import useMyState from "../../Hooks/useMyState";
 import axios from "axios";
@@ -24,9 +24,8 @@ const Filter = () => {
     allCategoriesAndBrandsPending,
     setAllCategoriesAndBrandsPending,
     setBrand,
+    setCategory,
   } = useMyState();
-
-  const [category, setCategory] = useState([]);
 
   // handler for price range changes
   const handleInputChange = (setter) => (value) => {
@@ -42,8 +41,7 @@ const Filter = () => {
 
   //   handler for category
   const handleCategory = (val) => {
-    console.log("cat", val);
-    setCategory(val);
+    setCategory([...val]);
   };
 
   useEffect(() => {
@@ -130,8 +128,15 @@ const Filter = () => {
         <div>
           <FilterTitle title="Category" />
           <Checkbox.Group className="flex flex-col" onChange={handleCategory}>
-            <Checkbox value="Category A">Category A</Checkbox>
-            <Checkbox value="Category B">Category B</Checkbox>
+            {allCategoriesAndBrandsPending ? (
+              <Spin />
+            ) : (
+              allCategoriesAndBrands?.categories?.map((brand, idx) => (
+                <Checkbox key={idx} value={brand} className="capitalize">
+                  {brand}
+                </Checkbox>
+              ))
+            )}
           </Checkbox.Group>
         </div>
       </nav>

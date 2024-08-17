@@ -28,6 +28,8 @@ const StateProvider = ({ children }) => {
     useState(true);
   //filter by brand
   const [brand, setBrand] = useState([]);
+  // filter by categories
+  const [category, setCategory] = useState([]);
 
   const stateInfo = {
     filter,
@@ -57,6 +59,8 @@ const StateProvider = ({ children }) => {
     setAllCategoriesAndBrandsPending,
     brand,
     setBrand,
+    category,
+    setCategory,
   };
 
   return (

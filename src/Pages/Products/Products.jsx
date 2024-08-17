@@ -2,7 +2,7 @@ import { Empty, Pagination, Select, Skeleton } from "antd";
 import Filter from "../../Components/Products/Filter";
 import Product from "../../Components/Products/Product";
 import useMyState from "../../Hooks/useMyState";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
@@ -33,12 +33,13 @@ const Home = () => {
     sortBy,
     setSortBy,
     minPrice,
-    setMinPrice,
     maxPrice,
-    setMaxPrice,
     brand,
-    setBrand,
+    category,
   } = useMyState();
+
+  // ref for cancel token
+  const sourceRef = useRef(axios.CancelToken.source());
 
   const { search } = useLocation();
 
@@ -49,31 +50,52 @@ const Home = () => {
     setCurrPage(1);
   }, [search, minPrice, maxPrice]);
 
-  // item counts
+  // fetch item counts
   useEffect(() => {
     setItemsCountPending(true);
     axios
       .get(
-        `${baseURL}/totalProductsCount?search=${searchItems}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}`
+        `${baseURL}/totalProductsCount?search=${searchItems}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}&category=${category}`
       )
       .then((response) => {
         setItemCounts(response.data.itemCount);
         setItemsCountPending(false);
       });
-  }, [searchItems, minPrice, maxPrice, brand]);
+  }, [searchItems, minPrice, maxPrice, brand, category]);
 
   // fetch items
   useEffect(() => {
+    // Cancel previous request if there's one
+    sourceRef.current.cancel("Operation canceled due to new request.");
+
+    // Create a new cancel token for the current request
+    const source = axios.CancelToken.source();
+    sourceRef.current = source;
+
     setItemsPending(true);
     axios
       .get(
-        `${baseURL}/products?search=${searchItems}&page=${currPage}&sort=${sortBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}`
+        `${baseURL}/products?search=${searchItems}&page=${currPage}&sort=${sortBy}&minPrice=${minPrice}&maxPrice=${maxPrice}&brand=${brand}&category=${category}`,
+        { cancelToken: source.token }
       )
       .then((response) => {
         setItems(response.data);
         setItemsPending(false);
+      })
+      .catch((error) => {
+        if (axios.isCancel(error)) {
+          console.log("Request canceled", error.message);
+        } else {
+          console.error("Error fetching data", error);
+        }
+        setItemsPending(false);
       });
-  }, [searchItems, currPage, sortBy, minPrice, maxPrice,brand,baseURL]);
+
+    // Cleanup function to cancel the request on component unmount or before the next request
+    return () => {
+      source.cancel("Operation canceled due to new request.");
+    };
+  }, [searchItems, currPage, sortBy, minPrice, maxPrice, brand, category]);
 
   return (
     <div className="lg:flex lg:justify-center gap-6 lg:px-8 my-6">
