@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import { Checkbox, InputNumber, Slider } from "antd";
+import useMyState from "../../Hooks/useMyState";
 
 const FilterTitle = ({ title }) => (
   <h2 className="text-sm font-semibold tracking-widest uppercase text-gray-950">
@@ -9,6 +10,7 @@ const FilterTitle = ({ title }) => (
 );
 
 const Filter = () => {
+  const { filter, setFilter } = useMyState();
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(500);
   const [brand, setBrand] = useState([]);
@@ -35,12 +37,36 @@ const Filter = () => {
     console.log(category);
     // console.log(brand);
   }, [category]);
+
   return (
-    <aside className="w-full sm:w-64 text-gray-800">
+    <aside
+      className={`${
+        filter ? "translate-x-0 px-8 pt-20" : "-translate-x-full  "
+      } absolute lg:static lg:px-0 lg:pt-0 lg:translate-x-0 w-80 lg:w-64 text-gray-800 duration-200 z-20 bg-gray-900 lg:bg-white h-full inset-0`}
+    >
+      <button
+        onClick={() => setFilter(false)}
+        className="absolute right-1/2 translate-x-1/2 top-6 bg-slate-50 rounded-full p-1 lg:hidden"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth="1.5"
+          stroke="currentColor"
+          className="size-8"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6 18 18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
       <nav className="space-y-8 text-sm *:p-6 *:space-y-2 *:bg-white *:rounded-md">
         <div>
           <FilterTitle title="Price Range" />
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <InputNumber
               min={0}
               max={499}
