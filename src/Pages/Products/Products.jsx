@@ -48,7 +48,7 @@ const Home = () => {
       setSearchItems("");
     }
     setCurrPage(1);
-  }, [search, minPrice, maxPrice]);
+  }, [search, minPrice, maxPrice, brand, category]);
 
   // fetch item counts
   useEffect(() => {

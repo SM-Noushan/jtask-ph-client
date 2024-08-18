@@ -37,7 +37,7 @@ const SignUp = () => {
     <div className="bg-white p-8 w-full">
       <div>
         <img
-          src="../../../public/logo-transparent-bg.png"
+          src="./logo-transparent-bg.png"
           alt="website-logo"
           className="h-20"
         />
