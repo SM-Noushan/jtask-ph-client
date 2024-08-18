@@ -83,7 +83,7 @@ const SignIn = () => {
     <>
       <div>
         <img
-          src="../../../public/logo-transparent-bg.png"
+          src="./logo-transparent-bg.png"
           alt="website-logo"
           className="h-20"
         />
