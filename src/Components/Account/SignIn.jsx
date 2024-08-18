@@ -3,6 +3,7 @@ import GenericButton from "../Buttons/GenericButton";
 import CommonInput from "../Form/CommonInput";
 import useAuth from "../../Hooks/useAuth";
 import toast from "react-hot-toast";
+import logo from "../../Assets/logo-transparent-bg.png";
 
 const socialLogin = (google, loading, handleSocialLogin) => (
   <>
@@ -82,11 +83,10 @@ const SignIn = () => {
   return (
     <>
       <div>
-        <img
-          src="./logo-transparent-bg.png"
-          alt="website-logo"
-          className="h-20"
-        />
+        <Link to="/">
+          <span className="sr-only">Website Logo</span>
+          <img src={logo} alt="website-logo" className="h-20" />
+        </Link>
         <h2 className="text-xl font-semibold my-4">Log In To Your Account</h2>
         <span>Welcome Back! Select a method to log in:</span>
         {/* SOCIAL LOGIN BUTTON */}
