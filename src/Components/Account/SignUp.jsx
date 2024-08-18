@@ -3,6 +3,7 @@ import GenericButton from "../Buttons/GenericButton";
 import CommonInput from "../Form/CommonInput";
 import useAuth from "../../Hooks/useAuth";
 import toast from "react-hot-toast";
+import logo from "../../Assets/logo-transparent-bg.png";
 
 const SignUp = () => {
   const { createUser, updateUserProfile, loading, setLoading } = useAuth();
@@ -36,11 +37,10 @@ const SignUp = () => {
   return (
     <div className="bg-white p-8 w-full">
       <div>
-        <img
-          src="./logo-transparent-bg.png"
-          alt="website-logo"
-          className="h-20"
-        />
+        <Link to="/">
+          <span className="sr-only">Website Logo</span>
+          <img src={logo} alt="website-logo" className="h-20" />
+        </Link>
         <h2 className="text-xl font-semibold my-2">
           {/* Log In To Your Account */}
           Create Your Account
